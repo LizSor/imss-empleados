@@ -111,3 +111,63 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+
+
+
+
+// ... (tu código JavaScript existente para el loginModal) ...
+
+// Obtener elementos de la nueva ventanita de contacto sencilla
+const simpleContactModal = document.getElementById('simpleContactModal');
+const openSimpleContactModalNavBtn = document.getElementById('openSimpleContactModalNav');
+const openSimpleContactModalFooterBtn = document.getElementById('openSimpleContactModalFooter'); // Botón del footer
+const simpleContactCloseBtn = simpleContactModal.querySelector('.close-button');
+
+// Función para abrir la ventanita de contacto
+function openSimpleContactModal() {
+    simpleContactModal.style.display = 'block';
+    document.body.classList.add('modal-open'); // Previene el scroll del fondo
+}
+
+// Función para cerrar la ventanita de contacto
+function closeSimpleContactModal() {
+    simpleContactModal.style.display = 'none';
+    document.body.classList.remove('modal-open'); // Habilita el scroll del fondo
+}
+
+// Escuchadores de eventos para la ventanita de contacto
+if (openSimpleContactModalNavBtn) {
+    openSimpleContactModalNavBtn.addEventListener('click', function(event) {
+        event.preventDefault(); // Previene el comportamiento por defecto del enlace
+        openSimpleContactModal();
+    });
+}
+
+if (openSimpleContactModalFooterBtn) {
+    openSimpleContactModalFooterBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        openSimpleContactModal();
+    });
+}
+
+if (simpleContactCloseBtn) {
+    simpleContactCloseBtn.addEventListener('click', closeSimpleContactModal);
+}
+
+// Cerrar la ventanita si el usuario hace clic fuera de ella
+window.addEventListener('click', function(event) {
+    if (event.target === simpleContactModal) {
+        closeSimpleContactModal();
+    }
+});
+
+// Opcional: Cerrar la ventanita con la tecla ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        if (simpleContactModal.style.display === 'block') {
+            closeSimpleContactModal();
+        }
+    }
+});
