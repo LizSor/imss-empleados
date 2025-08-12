@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trámites y Servicios del ISSSTE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container-tramites {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 60px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        .filter-controls label {
+            font-weight: bold;
+            color: #555;
+        }
+        .filter-controls select,
+        .filter-controls input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+            flex-grow: 1;
+            max-width: 250px;
+        }
+        .filter-controls {
+            padding: 10px 20px;
+       
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .filter-controls button:hover {
+            background-color: var(--button-accent-color);
+        }
+        #resultsList {
+            list-style: none;
+            padding: 0;
+            column-count: 2;
+            column-gap: 40px;
+        }
+        #resultsList li {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e6ea;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            break-inside: avoid-column;
+            display: flex;
+            flex-direction: column;
+        }
+        #resultsList li .category-label {
+            font-size: 0.8em;
+            color: #6c757d;
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 3px;
+            align-self: flex-end;
+            margin-top: 5px;
+        }
+        .no-results {
+            text-align: center;
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 40px 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-controls select,
+            .filter-controls input[type="text"] {
+                max-width: 100%;
+            }
+            #resultsList {
+                column-count: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container header-top">
+            <div class="logo">
+                <img src="logo_app empleados.png" alt="Logo Gestión Digital">
+                <h1>Ventanilla Única de Trámites <br><span class="subtitle">Coordinación Estatal Estado de México</span></h1> 
+            </div>
+            <div class="header-utilities">
+                <div class="user-profile">
+                    <span class="user-name">Bienvenido, Carlos</span>
+                    <i class="fas fa-user-circle user-icon"></i> </div>
+                <a href="login-register.html" class="button login-button">Iniciar sesión</a>
+                <button class="menu-toggle-btn" id="menuToggleBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <ul id="main-menu">
+                <li><a href="#hero-section" class="nav-link active">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropbtn">Departamentos <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#">Fuerza de Trabajo</a>
+                        <a href="#">Presupuesto de Servicios Profesionales</a>
+                        <a href="#">Reclutamiento y Selección</a>
+                        <a href="#">Relaciones Laborales</a>
+                        <a href="#">Nómina</a>
+                        <a href="#">Depto. Jurídico</a>
+                    </div>
+                </li>
+                <li><a href="#services-section" class="nav-link">Servicios</a></li>
+                <li><a href="#news-section" class="nav-link">Noticias</a></li>
+                <li><a href="#resources-section" class="nav-link">Recursos</a></li>
+                <li><a href="#simpleContactModal" class="nav-link" id="openSimpleContactModalNav">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container-tramites">
+        <h4>Trámites del ISSSTE</h4>
+        <p>Utilice los filtros para encontrar rápidamente los trámites del ISSSTE que necesita.</p>
+        <div class="filter-controls">
+            <div>
+                <label for="categoryFilter">Filtrar por categoría:</label>
+                <select id="categoryFilter" onchange="applyFilters()">
+                    <option value="">Todas las Categorías</option>
+                    </select>
+            </div>
+            <div>
+                <label for="textSearch">Buscar por texto:</label>
+                <input type="text" id="textSearch" placeholder="Ej. pensión, hipoteca..." onkeyup="applyFilters()">
+            </div>
+            <button class="button" onclick="clearFilters()">Limpiar filtros</button>
+        </div>
+
+        <p class="no-results" id="noResultsMessage">No se encontraron resultados que coincidan con sus filtros.</p>
+
+        <h4>Resultados de búsqueda y filtros</h4>
+        <ul id="resultsList"></ul>
+    </div>
+
+    <script>
+        const servicesData = [
+            // Apoyos
+            { name: "Descuento para tramitar tu testamento público abierto ante Notario Público.", category: "Apoyos" },
+            { name: "Pago de gastos de funeral a pensionados y jubilados del ISSSTE.", category: "Apoyos" },
+            { name: "Servicios de cremación del ISSSTE.", category: "Apoyos" },
+            { name: "Servicios de velación del ISSSTE.", category: "Apoyos" },
+            { name: "Servicios funerarios, obtención de fosa, del ISSSTE.", category: "Apoyos" },
+            { name: "Subsidio del ISSSTE por enfermedad o accidente ajeno al trabajo.", category: "Apoyos" },
+
+            // Atención médica
+            { name: "Alta provisional de trabajador ISSSTE.", category: "Atención médica" },
+            { name: "Autorización para recibir atención médica en otra clínica del ISSSTE.", category: "Atención médica" },
+            { name: "Cambio de domicilio del trabajador(a), pensionado(a) del ISSSTE.", category: "Atención médica" },
+            { name: "Cita médica en el ISSSTE por teléfono o internet.", category: "Atención médica" },
+            { name: "Corrección de nombre del derechohabiente del ISSSTE.", category: "Atención médica" },
+            { name: "Prórroga de servicios médicos en el ISSSTE por estudios o por incapacidad física o psíquica.", category: "Atención médica" },
+            { name: "Registro de concubina o concubinario como derechohabiente del ISSSTE.", category: "Atención médica" },
+            { name: "Registro de cónyuge como derechohabiente del ISSSTE.", category: "Atención médica" },
+            { name: "Registro de familiares ascendientes (padres, abuelos, bisabuelos, etc.) como derechohabientes del ISSSTE.", category: "Atención médica" },
+            { name: "Registro de hijo o hija como derechohabiente del ISSSTE.", category: "Atención médica" },
+            { name: "Servicios condicionados de atención obstétrica en el ISSSTE.", category: "Atención médica" },
+            { name: "Solicitud de atención médica al recién nacido en el ISSSTE.", category: "Atención médica" },
+            { name: "Solicitud de pago de prótesis y ortésis al ISSSTE a consecuencia de un riesgo de trabajo.", category: "Atención médica" },
+            { name: "Solicitud de Reembolso por Gastos Médicos Extrainstitucionales del ISSSTE.", category: "Atención médica" },
+
+            // Continuación voluntaria en el ISSSTE
+            { name: "Continuación voluntaria en el régimen obligatorio, seguros, retiro, cesantía en edad avanzada y vejez.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Continuación voluntaria en el régimen obligatorio, seguro de retiro, cesantía en edad avanzada y vejez.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Continuación voluntaria en el régimen obligatorio, seguro de salud.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Continuación voluntaria en el régimen obligatorio, seguros de retiro, cesantía en edad avanzada y vejez e invalidez y vida.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Continuación voluntaria en el régimen obligatorio, seguros de salud e invalidez y vida.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Continuación voluntaria en el régimen obligatorio, seguros de salud, retiro, cesantía en edad avanzada y vejez e invalidez y vida.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Consulta o reclamación del régimen de cuenta individual en el ISSSTE.", category: "Continuación voluntaria en el ISSSTE" },
+            { name: "Consulta o reclamación en el régimen Décimo Transitorio en el ISSSTE.", category: "Continuación voluntaria en el ISSSTE" },
+
+            // Créditos
+            { name: "Solicitud de carta de no adeudo por crédito hipotecario FOVISSSTE.", category: "Créditos" },
+            { name: "Solicitud de crédito hipotecario cofinanciado FOVISSSTE.", category: "Créditos" },
+            { name: "Solicitud de crédito hipotecario conyugal FOVISSSTE-INFONAVIT.", category: "Créditos" },
+            { name: "Solicitud de crédito hipotecario FOVISSSTE con subsidio.", category: "Créditos" },
+            { name: "Solicitud de crédito hipotecario pensionado FOVISSSTE.", category: "Créditos" },
+            { name: "Solicitud de crédito hipotecario tradicional FOVISSSTE.", category: "Créditos" },
+            { name: "Solicitud de prórroga de pago de crédito hipotecario FOVISSSTE por separación del servicio público.", category: "Créditos" },
+
+            // Crédito para la vivienda
+            { name: "Aclaración del domicilio en el estado de cuenta del crédito hipotecario FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Aclaración del RFC en el estado de cuenta del crédito hipotecario FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Actualización del estado de cuenta del crédito hipotecario FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Cancelación de garantías hipotecarias FOVISSSTE mediante instrumento administrativo.", category: "Crédito para la vivienda" },
+            { name: "Cancelación de garantías hipotecarias FOVISSSTE mediante Notario Público.", category: "Crédito para la vivienda" },
+            { name: "Constancia de intereses reales pagados de crédito hipotecario FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Devolución de depósitos del 5% en el caso de los ex trabajadores mayores de 50 años de edad que hubieran estado más de un año separados del servicio público.", category: "Crédito para la vivienda" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5% en el caso de defunción en servicio activo.", category: "Crédito para la vivienda" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5% en el caso de pensión por incapacidad total permanente o invalidez.", category: "Crédito para la vivienda" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, en el caso de jubilación sin crédito hipotecario FOVISSSTE o con crédito liquidado.", category: "Crédito para la vivienda" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de jubilación sin crédito hipotecario FOVISSSTE o con crédito liquidado.", category: "Crédito para la vivienda" },
+            { name: "Devolución de depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de los ex- trabajadores mayores de 50 años de edad que hubieran estado más de un año separados del servicio público.", category: "Crédito para la vivienda" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de defunción en servicio activo.", category: "Crédito para la vivienda" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de pensión por incapacidad total permanente o invalidez.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de carta de no adeudo por crédito hipotecario FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de crédito hipotecario cofinanciado FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de crédito hipotecario conyugal FOVISSSTE-INFONAVIT.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de crédito hipotecario FOVISSSTE con subsidio.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de crédito hipotecario pensionado FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de crédito hipotecario tradicional FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de devolución de descuentos en caso de no tener crédito hipotecario FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de devolución de descuentos por concepto de créditos hipotecarios FOVISSSTE.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de liquidación de crédito hipotecario del FOVISSSTE por defunción del acreditado.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de liquidación de crédito hipotecario del FOVISSSTE por incapacidad total permanente o invalidez del acreditado.", category: "Crédito para la vivienda" },
+            { name: "Solicitud de portabilidad del saldo de la subcuenta de vivienda FOVISSSTE – INFONAVIT", category: "Crédito para la vivienda" },
+            { name: "Solicitud de prórroga de pago de crédito hipotecario FOVISSSTE por separación del servicio público.", category: "Crédito para la vivienda" },
+
+            // Cultura y deporte
+            { name: "Talleres de terapia ocupacional dentro de los Programas de recreación, cultura y deporte para pensionados y jubilados del ISSSTE.", category: "Cultura y deporte" },
+
+            // Declaraciones, pagos y garantías
+            { name: "Constancia de intereses reales pagados de crédito hipotecario FOVISSSTE.", category: "Declaraciones, pagos y garantías" },
+
+            // Estancias infantiles
+            { name: "Constancia para el ingreso a estancias de bienestar y desarrollo infantil del ISSSTE.", category: "Estancias infantiles" },
+            { name: "Ingreso a Estancias para el Bienestar y Desarrollo Infantil del ISSSTE.", category: "Estancias infantiles" },
+
+            // Hipotecas
+            { name: "Autorización de venta y escrituración de departamentos ubicados en centros urbanos del ISSSTE.", category: "Hipotecas" },
+            { name: "Autorización de venta y escrituración de locales comerciales ubicados en centros urbanos del ISSSTE.", category: "Hipotecas" },
+            { name: "Cancelación de garantías hipotecarias FOVISSSTE mediante instrumento administrativo.", category: "Hipotecas" },
+            { name: "Cancelación de garantías hipotecarias FOVISSSTE mediante Notario Público.", category: "Hipotecas" },
+            { name: "Cancelación de hipoteca vía administrativa en el ISSSTE.", category: "Hipotecas" },
+            { name: "Estado de cuenta de tu crédito hipotecario del ISSSTE (Otorgado antes de 1985).", category: "Hipotecas" },
+
+            // Movimientos afiliatorios
+            { name: "Acreditación de no afiliación al ISSSTE.", category: "Movimientos afiliatorios" },
+            { name: "Acreditación de tiempo de cotización al ISSSTE para cálculo de bonos de pensión del trabajador de reingreso.", category: "Movimientos afiliatorios" },
+            { name: "Acreditación de la vigencia de derechos para el acceso a los seguros, prestaciones y servicios del ISSSTE.", category: "Movimientos afiliatorios" },
+            { name: "Designación de beneficiarios sustitutos régimen de cuenta individual en el ISSSTE.", category: "Movimientos afiliatorios" },
+            { name: "Expedición de Certificado de Ayuda de Desempleo", category: "Movimientos afiliatorios" },
+            { name: "Modificación de datos personales en la cuenta individual en el ISSSTE.", category: "Movimientos afiliatorios" },
+            { name: "Modificación de datos personales en tu cuenta individual en el régimen del décimo transitorio en el ISSSTE.", category: "Movimientos afiliatorios" },
+            { name: "Solicitud de actualización de Historial Laboral", category: "Movimientos afiliatorios" },
+            { name: "Modificación de Historial Laboral por Cumplimiento de Laudo", category: "Movimientos afiliatorios" },
+            { name: "Solicitud de actualización o corrección de CURP", category: "Movimientos afiliatorios" },
+            { name: "Transferencia de Derechos IMSS-ISSSTE", category: "Movimientos afiliatorios" },
+
+            // Pensiones
+            { name: "Aportaciones voluntarias en el ISSSTE.", category: "Pensiones" },
+            { name: "Continuación voluntaria en el régimen obligatorio, seguros de invalidez y vida.", category: "Pensiones" },
+            { name: "Designación de beneficiarios para tu cuenta individual del ISSSTE.", category: "Pensiones" },
+            { name: "Estados de cuenta sobre tu cuenta individual en el régimen del décimo transitorio en el ISSSTE.", category: "Pensiones" },
+            { name: "Indemnización global en el ISSSTE.", category: "Pensiones" },
+            { name: "Pago de pensión garantizada en el régimen de cuenta individual del ISSSTE.", category: "Pensiones" },
+            { name: "Pago de pensión por retiro programado régimen de cuenta individual en el ISSSTE.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por causa de muerte del pensionado.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por causa de muerte del trabajador.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por cesantía en edad avanzada.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por edad y tiempo de servicios.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por invalidez temporal o permanente.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por jubilación.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por muerte del pensionado por riesgos de trabajo.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por muerte del trabajador por riesgos de trabajo.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario por muerte del pensionado por riesgos de trabajo.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por causa de muerte del pensionado.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por causa de muerte del trabajador.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por cesantía en edad avanzada.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por muerte del trabajador por riesgos de trabajo.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por invalidez temporal o permanente.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por retiro.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por riesgos de trabajo por incapacidad parcial o total.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por Régimen Ordinario, por vejez.", category: "Pensiones" },
+            { name: "Pensión del ISSSTE por riesgos de trabajo por incapacidad parcial o total.", category: "Pensiones" },
+            { name: "Pensión por Régimen Ordinario del ISSSTE garantizada.", category: "Pensiones" },
+            { name: "Registro de cuenta individual a AFORE PENSIONISSSTE.", category: "Pensiones" },
+            { name: "Traspaso de cuenta individual de AFORE a PENSIONISSSTE.", category: "Pensiones" },
+            { name: "Retiro de aportaciones voluntarias en el ISSSTE.", category: "Pensiones" },
+            { name: "Retiro parcial conforme al Décimo Transitorio de la Ley del ISSSTE.", category: "Pensiones" },
+            { name: "Retiro de la cuenta individual en el ISSSTE al cumplir 65 años.", category: "Pensiones" },
+            { name: "Retiro parcial de recursos en la cuenta individual por desempleo o matrimonio en el ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos por 65 años, para trabajadores bajo el régimen del artículo Décimo Transitorio de la Ley del ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos de la cuenta individual por beneficiarios en el ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos de la cuenta individual por no cumplir los requisitos de cotización en el ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos de la cuenta individual por recursos excedentes en el ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos SAR-ISSSTE por pensión, para trabajadores bajo el régimen del artículo Décimo Transitorio de la Ley del ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos SAR-ISSSTE por cumplimiento de un plan de pensiones establecidos con la dependencia.", category: "Pensiones" },
+            { name: "Retiro total de recursos SAR-ISSSTE por los beneficiarios del titular de la cuenta por el régimen Décimo Transitorio de la Ley del ISSSTE.", category: "Pensiones" },
+            { name: "Retiro total de recursos SAR-ISSSTE, por trabajadores pensionados que reingresaron a cotizar al ISSSTE.", category: "Pensiones" },
+            { name: "Separación de cuentas del ISSSTE.", category: "Pensiones" },
+            { name: "Solicitud de información régimen de cuenta individual en el ISSSTE.", category: "Pensiones" },
+            { name: "Transferencia entre SIEFORES régimen de cuenta individual en el ISSSTE.", category: "Pensiones" },
+            { name: "Traspaso de cuenta individual de AFORE a PENSIONISSSTE.", category: "Pensiones" },
+            { name: "Unificación de cuentas en el ISSSTE.", category: "Pensiones" },
+
+            // Préstamos
+            { name: "Abono o liquidación de tu préstamo del ISSSTE.", category: "Préstamos" },
+            { name: "Cancelación de saldo en préstamos personales ISSSTE por defunción, incapacidad total permanente o invalidez.", category: "Préstamos" },
+            { name: "Consulta en línea el saldo de tu préstamo del ISSSTE.", category: "Préstamos" },
+            { name: "Estado de cuenta individual de tu préstamo personal ISSSTE.", category: "Préstamos" },
+            { name: "Pago en línea de tu préstamo personal del ISSSTE mediante el Formato de Pagos Individuales (FOPI).", category: "Préstamos" },
+            { name: "Préstamo especial.", category: "Préstamos" },
+            { name: "Préstamo extraordinario para damnificados por desastres naturales.", category: "Préstamos" },
+            { name: "Préstamo ordinario.", category: "Préstamos" },
+            { name: "Préstamo para adquisición de bienes de uso duradero.", category: "Préstamos" },
+            { name: "Recuperación de descuentos del préstamo personal del ISSSTE.", category: "Préstamos" },
+            { name: "Regularización del descuento de tu préstamo personal en el ISSSTE.", category: "Préstamos" },
+
+            // Quejas médicas
+            { name: "Queja Médica ante el ISSSTE.", category: "Quejas médicas" },
+            { name: "Recurso de Reconsideración ante el ISSSTE.", category: "Quejas médicas" },
+
+            // Orientaciones y peticiones
+            { name: "Atención a Derechohabientes sobre Trámites y Servicios del ISSSTE.", category: "Orientaciones y peticiones" },
+
+            // Seguridad social
+            { name: "Aclaración del domicilio en el estado de cuenta del crédito hipotecario FOVISSSTE.", category: "Seguridad social" },
+            { name: "Aclaración del RFC en el estado de cuenta del crédito hipotecario FOVISSSTE.", category: "Seguridad social" },
+            { name: "Actualización del estado de cuenta del crédito hipotecario FOVISSSTE.", category: "Seguridad social" },
+            { name: "Devolución de depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de los ex- trabajadores mayores de 50 años de edad que hubieran estado más de un año separados del servicio público.", category: "Seguridad social" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de defunción en servicio activo.", category: "Seguridad social" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de jubilación sin crédito hipotecario FOVISSSTE o con crédito liquidado.", category: "Seguridad social" },
+            { name: "Devolución de recursos correspondientes a los depósitos del 5%, realizados en el período de 1972 a 1992, en el caso de pensión por incapacidad total permanente o invalidez.", category: "Seguridad social" },
+            { name: "Solicitud de aplicación al crédito FOVISSSTE de depósitos del 5% realizados en el periodo de 1972 a 1992, en caso de jubilación del acreditado.", category: "Seguridad social" },
+            { name: "Solicitud de aplicación al crédito FOVISSSTE de depósitos del 5% realizados en el periodo de 1972 a 1992, en caso de incapacidad total permanente o invalidez del acreditado.", category: "Seguridad social" },
+            { name: "Solicitud de aplicación al crédito FOVISSSTE de depósitos del 5% realizados en el periodo de 1972 a 1992, en caso de baja del acreditado del servicio público.", category: "Seguridad social" },
+            { name: "Solicitud de aplicación al crédito FOVISSSTE de depósitos del 5% realizados en el periodo de 1972 a 1992, en caso de defunción del acreditado.", category: "Seguridad social" },
+            { name: "Solicitud de devolución de descuentos por concepto de créditos hipotecarios FOVISSSTE.", category: "Seguridad social" },
+            { name: "Solicitud de devolución de descuentos en caso de no tener crédito hipotecario FOVISSSTE.", category: "Seguridad social" },
+            { name: "Solicitud de liquidación de crédito hipotecario del FOVISSSTE por incapacidad total permanente o invalidez del acreditado.", category: "Seguridad social" },
+            { name: "Solicitud de liquidación de crédito hipotecario del FOVISSSTE por defunción del acreditado.", category: "Seguridad social" },
+
+            // Servicios sociales, deportivos y culturales
+            { name: "Servicios de actividades deportivas para derechohabientes del ISSSTE.", category: "Servicios sociales, deportivos y culturales" },
+
+            // Subsidio
+            { name: "Solicitud de crédito hipotecario FOVISSSTE con subsidio.", category: "Subsidio" },
+
+            // TURISSSTE
+            { name: "Servicios turísticos para los derechohabientes del ISSSTE", category: "TURISSSTE" },
+
+            // Viaje para Pensionados y Jubilados
+            { name: "Programa Convive para pensionado y jubilado del ISSSTE.", category: "Viaje para Pensionados y Jubilados" },
+            { name: "Programa Recreativo para pensionados y jubilados del ISSSTE.", category: "Viaje para Pensionados y Jubilados" },
+        ];
+
+        // Obtener categorías únicas y ordenarlas
+        const categories = [...new Set(servicesData.map(service => service.category))].sort();
+
+        // Rellenar el filtro de categoría
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryFilter = document.getElementById('categoryFilter');
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+            // ************ CAMBIO CLAVE AQUÍ ************
+            // No llamar a displayServices(servicesData) al inicio.
+            // La lista estará vacía hasta que se apliquen filtros.
+            // displayServices([]); // Puedes optar por mostrar una lista vacía explícitamente
+        });
+
+        function applyFilters() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            const searchText = document.getElementById('textSearch').value.toLowerCase();
+            const resultsList = document.getElementById('resultsList');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+
+            // Filtrar servicios
+            let filteredServices = servicesData.filter(service => {
+                const matchesCategory = !selectedCategory || service.category === selectedCategory;
+                const matchesText = !searchText || service.name.toLowerCase().includes(searchText);
+                return matchesCategory && matchesText;
+            });
+
+            // Ordenar alfabéticamente los resultados filtrados
+            filteredServices.sort((a, b) => a.name.localeCompare(b.name));
+
+            // Mostrar los servicios filtrados
+            displayServices(filteredServices);
+
+            // Mostrar u ocultar el mensaje de "no resultados"
+            if (filteredServices.length === 0 && (selectedCategory || searchText)) {
+                noResultsMessage.style.display = 'block';
+            } else {
+                noResultsMessage.style.display = 'none';
+            }
+        }
+
+        function displayServices(services) {
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = ''; // Limpiar lista actual
+
+            services.forEach(service => {
+                const li = document.createElement('li');
+                li.innerHTML = `${service.name} <span class="category-label">${service.category}</span>`;
+                resultsList.appendChild(li);
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('textSearch').value = '';
+            // Después de limpiar, la lista se vaciará de nuevo.
+            // Si quieres que se muestren todos los servicios al limpiar, llama a applyFilters()
+            // Si quieres que siga vacía hasta una nueva búsqueda, no hagas nada aquí.
+            displayServices([]); // Vaciar la lista al limpiar los filtros
+            document.getElementById('noResultsMessage').style.display = 'none'; // Ocultar mensaje de no resultados
+        }
+    </script>
+</body>
+</html>

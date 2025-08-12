@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Portal del Empleado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* This entire style block will be modified below */
+        /* It's better to put this in style.css */
+        .hero-section {
+            position: relative; /* Important for positioning the overlay */
+            min-height: 500px; /* Adjust this height as needed for your design */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white; /* Make sure your text is visible over the background */
+            padding: 50px 20px;
+            overflow: hidden; /* Important if your content has a fixed height */
+
+            /* --- NEW: Background Image Styles --- */
+            background-image: url('normatividad.png'); /* Set your image as background */
+            background-size: cover; /* Cover the entire section */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Don't repeat the image */
+        }
+
+        /* The image-overlay should still apply on top of the background-image */
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+            z-index: 0; /* Above the background-image, but still behind the text */
+        }
+
+        /* Styles for your text content (remains largely the same) */
+        .hero-content-text {
+            position: relative; /* Ensure text is above the overlay */
+            z-index: 1; /* Makes sure the text is visible */
+            max-width: 800px; /* Limit text width for readability */
+            margin: 0 auto;
+        }
+
+        /* REMOVE the hero-image-wrapper and hero-image rules as they are no longer needed */
+        /*
+        .hero-image-wrapper { display: none; }
+        .hero-image { display: none; }
+
+        /* --- New styles for Normas section --- */
+
+        #norms-section {
+            padding: 60px 20px; /* Add padding top/bottom */
+            background-color: #f9f9f9; /* Light background for this section */
+            text-align: center; /* Center the heading */
+        }
+
+        #norms-section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2em;
+            color: #333;
+            margin-bottom: 40px;
+            position: relative; /* For the underline effect */
+            display: inline-block; /* To make underline fit content */
+        }
+
+        #norms-section h2::after {
+            content: '';
+            display: block;
+            width: 60px; /* Length of the underline */
+            height: 3px;
+            background-color: #006657; /* Your primary green */
+            margin: 10px auto 0; /* Center the underline */
+        }
+
+        .normas-document-list {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap to next line */
+            justify-content: center; /* Center items if they don't fill a row */
+            gap: 20px; /* Space between document links */
+            max-width: 1000px; /* Max width for the list */
+            margin: 0 auto; /* Center the list itself */
+            padding: 0 10px; /* Padding for mobile view */
+        }
+
+        .normas-document-list div { /* Each item wrapper */
+            background-color: #ffffff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            flex: 1 1 calc(33% - 40px); /* 3 items per row on wider screens, with gap consideration */
+            min-width: 280px; /* Minimum width before wrapping */
+            box-sizing: border-box;
+            text-align: left;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .normas-document-list div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .norma-link {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #006657; /* Your primary green */
+            text-decoration: none;
+            display: block; /* Make the whole area clickable */
+        }
+
+        .norma-link:hover {
+            text-decoration: underline;
+            color: #004d42; /* Darker green on hover */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .normas-document-list div {
+                flex: 1 1 calc(50% - 20px); /* 2 items per row */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .normas-document-list div {
+                flex: 1 1 100%; /* 1 item per row */
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container header-top">
+            <div class="logo">
+                <img src="logo_app empleados.png" alt="Logo Gestión Digital">
+                <h1>Ventanilla Única de Trámites <br><span class="subtitle">Coordinación Estatal Estado de México</span></h1>
+            </div>
+            <div class="header-utilities">
+                <div class="user-profile">
+                    <span class="user-name">Bienvenido, Carlos</span>
+                    <i class="fas fa-user-circle user-icon"></i> </div>
+                <a href="login-register.html" class="button login-button">Iniciar sesión</a>
+                <button class="menu-toggle-btn" id="menuToggleBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <ul id="main-menu">
+                <li><a href="#hero-section" class="nav-link active">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropbtn">Departamentos <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#">Fuerza de Trabajo</a>
+                        <a href="#">Presupuesto de Servicios Profesionales</a>
+                        <a href="#">Reclutamiento y Selección</a>
+                        <a href="#">Relaciones Laborales</a>
+                        <a href="#">Nómina</a>
+                        <a href="#">Depto. Jurídico</a>
+                    </div>
+                </li>
+                <li><a href="#services-section" class="nav-link">Servicios</a></li>
+                <li><a href="#news-section" class="nav-link">Noticias</a></li>
+                <li><a href="#resources-section" class="nav-link">Recursos</a></li>
+                <li><a href="#simpleContactModal" class="nav-link" id="openSimpleContactModalNav">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Iniciar sesión</h2>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="username">Usuario:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="button">Acceder</button>
+                <p class="forgot-password"><a href="#">¿Olvidaste tu contraseña?</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="simpleContactModal" class="modal">
+        <div class="modal-content contact-modal-content">
+            <span class="close-button">&times;</span>
+            <h2>CONTACTO</h2>
+
+            <div class="contact-info-simple">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <p><strong>Oficinas Coordinación:</strong></p>
+                        <p>Municipio de Naucalpan de Juárez, Estado de México, Av. Primero de Mayo 120, Piso 5, Naucalpan, C.P. 53500</p>
+                    </div>
+                </div>
+                <div class="info-item secondary-address">
+                    <div>
+                        <p><strong>Oficinas Metepec:</strong></p>
+                        <p>Municipio de Metepec, Estado de México, calle Agustín Melgar 2409-Mza 003, Colonia Madero, San Jerónimo Chicahualco, C.P. 52172</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <p><strong>Centro de atención telefónica:</strong></p>
+                        <p>800 298 11 50</p>
+                        <p><strong>Horarios de atención:</strong></p>
+                        <p>De lunes a viernes de 09:15 a 15:00 y de 17:00 a 19:00 horas</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fab fa-whatsapp"></i> <div>
+                        <p><strong>Envíanos mensaje de WhatsApp al:</strong></p>
+                        <p>55 53 20 01 79</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <p><strong>Correo electrónico:</strong></p>
+                        <p>coordinacion.edomex@imssbienestar.gob.mx</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content-single-page">
+        <section id="hero-section" class="hero-section content-section">
+            <div class="image-overlay"></div>
+ 
+        </section>
+
+        <div class="container">
+            <p>La normatividad interna es el conjunto de reglas y disposiciones administrativas generadas por 
+            el organismo público descentralizado Servicios de Salud del Instituto Mexicano del Seguro Social para el Bienestar (IMSS-BIENESTAR), 
+            con la finalidad de orientar la actuación de todo el personal que lo conforma en sus distintas áreas, tanto administrativas como operativas; 
+            asimismo, tiene como propósito agilizar el funcionamiento en cada una de las áreas que lo conforman.
+            </p>
+
+        </div>
+
+
+
+        <section id="norms-section" class="content-section">
+            <div class="container">
+                <h2>Normas</h2>
+                <div id="normas-list" class="normas-document-list">
+                    <p>Cargando documentos de normatividad...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer" id="footer">
+        <div class="container footer-content">
+            <div class="footer-links">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="#hero-section">Inicio</a></li>
+                    <li><a href="#services-section">Servicios</a></li>
+                    <li><a href="#news-section">Noticias</a></li>
+                    <li><a href="#resources-section">Recursos</a></li>
+                    <li><a href="normatividad.html" class="nav-link">Normatividad</a></li>
+                    <li><a href="#footer">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contacto</h4>
+                <p>Dirección: Calle Centro 123, Ciudad de México</p>
+                <p>Teléfono: +34 987 654 321</p>
+                <p>Email: info@tramites-servicios.com</p>
+            </div>
+
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025. Todos los derechos reservados.</p>
+            <p>Created by DataTech Impulse</p>
+        </div>
+    </footer>
+
+    <script src="normatividad.js"></script>
+</body>
+</html>
