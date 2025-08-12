@@ -14,13 +14,13 @@
         <div class="container header-top">
             <div class="logo">
                 <img src="logo_app empleados.png" alt="Logo Gestión Digital">
-                <h1>Gestión Digital</h1>
+                <h1>Ventanilla Única de Trámites <br><span class="subtitle">Coordinación Estatal Estado de México</span></h1> 
             </div>
             <div class="header-utilities">
                 <div class="user-profile">
                     <span class="user-name">Bienvenido, Carlos</span>
                     <i class="fas fa-user-circle user-icon"></i> </div>
-                <button class="button login-button" id="openLoginModal">Iniciar sesión</button>
+                <a href="login-register.html" class="button login-button">Iniciar sesión</a>
                 <button class="menu-toggle-btn" id="menuToggleBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -30,18 +30,22 @@
             <ul id="main-menu">
                 <li><a href="#hero-section" class="nav-link active">Inicio</a></li>
                 <li class="dropdown">
-                    <a href="#" class="nav-link dropbtn">Departamentos <i class="fas fa-caret-down"></i></a>
+                    <a href="#" class="nav-link dropbtn">Departamento <i class="fas fa-caret-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="#">Recursos Humanos</a>
-                        <a href="#">Finanzas</a>
-                        <a href="#">IT</a>
-                        <a href="#">Legal</a>
+                        <a href="#">Oficinas Recursos Humanos</a>
+                        <a href="#">Fuerza de Trabajo</a>
+                        <a href="#">Presupuesto de Servicios Profesionales</a>
+                        <a href="#">Reclutamiento y Selección</a>
+                        <a href="#">Relaciones Laborales</a>
+                        <a href="#">Nómina</a>
+                        <a href="#">Depto. Jurídico</a>
                     </div>
                 </li>
-                <li><a href="#services-section" class="nav-link">Servicios</a></li>
+                <li><a href="#services-section" class="nav-link">Servicio</a></li>
                 <li><a href="#news-section" class="nav-link">Noticias</a></li>
                 <li><a href="#resources-section" class="nav-link">Recursos</a></li>
-                <li><a href="#footer" class="nav-link">Contacto</a></li>
+                <li><a href="normatividad.html" class="nav-link">Normatividad</a></li>
+                <li><a href="#simpleContactModal" class="nav-link" id="openSimpleContactModalNav">Contacto</a></li>
             </ul>
         </nav>
     </header>
@@ -65,6 +69,60 @@
         </div>
     </div>
 
+    <div id="simpleContactModal" class="modal">
+        <div class="modal-content contact-modal-content">
+            <span class="close-button">&times;</span>
+            <h2>CONTACTO</h2>
+
+            <div class="contact-info-simple">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <p><strong>Oficinas Coordinación:</strong></p>
+                        <p>
+                            <a href="https://maps.google.com/?q=Av.+Primero+de+Mayo+120,+Piso+5,+Naucalpan,+C.P.+53500,+Naucalpan+de+Juárez,+Estado+de+México" target="_blank" rel="noopener noreferrer">
+                                Municipio de Naucalpan de Juárez, Estado de México, Av. Primero de Mayo 120, Piso 5, Naucalpan, C.P. 53500
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="info-item secondary-address">
+                    <div>
+                        <p>
+                            <a href="https://maps.google.com/?q=Calle+Agustín+Melgar+2409-Mza+003,+Colonia+Madero,+San+Jerónimo+Chicahualco,+C.P.+52172,+Metepec,+Estado+de+México" target="_blank" rel="noopener noreferrer">
+                                Municipio de Metepec, Estado de México, calle Agustín Melgar 2409-Mza 003, Colonia Madero, San Jerónimo Chicahualco, C.P. 52172
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <p><strong>Centro de atención telefónica:</strong></p>
+                        <p>800 298 11 50</p>
+                        <p><strong>Horarios de atención:</strong></p>
+                        <p>De lunes a viernes de 09:15 a 15:00 y de 17:00 a 19:00 horas</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fab fa-whatsapp"></i> <div>
+                        <p><strong>Envíanos mensaje de WhatsApp al:</strong></p>
+                        <p>55 53 20 01 79</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <p><strong>Correo electrónico:</strong></p>
+                        <p>coordinacion.edomex@imssbienestar.gob.mx</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main class="main-content-single-page">
         <section id="hero-section" class="hero-section content-section">
             <div class="hero-video-wrapper">
@@ -77,7 +135,7 @@
             <div class="container hero-content-text">
                 <h2>Tu portal de trámites y servicios del empleado</h2>
                 <p>Accede a todo lo que necesitas en un solo lugar: información, gestiones, noticias y recursos.</p>
-                <a href="#services-section" class="button">Descubre nuestros servicios</a>
+                <a href="tramites_issste.html" class="button" target="_blank">Inicio de Trámites</a>
             </div>
         </section>
 
@@ -89,17 +147,17 @@
                     <div class="service-card clear-card">
                         <i class="fas fa-file-invoice"></i> <h4>Nóminas y certificados</h4>
                         <p>Accede a tus recibos de nómina, certificados laborales y fiscales de manera segura y rápida.</p>
-                        <a href="#" class="button small-button">Ver detalles</a>
+                        <a href="#" class="button small-button">Ver requisitos</a>
                     </div>
                     <div class="service-card clear-card">
                         <i class="fas fa-user-tie"></i> <h4>Gestión de horarios</h4>
                         <p>Consulta tus horarios, solicita cambios y gestiona tus permisos y vacaciones desde aquí.</p>
-                        <a href="#" class="button small-button">Acceder</a>
+                        <a href="#" class="button small-button">Ver requisitos</a>
                     </div>
                     <div class="service-card clear-card">
                         <i class="fas fa-laptop-code"></i> <h4>Soporte IT</h4>
                         <p>Reporta incidencias técnicas, solicita equipos o software y obtén ayuda de nuestro equipo de soporte.</p>
-                        <a href="#" class="button small-button">Abrir ticket</a>
+                        <a href="#" class="button small-button">Ver requisitos</a>
                     </div>
                     <div class="service-card clear-card">
                         <i class="fas fa-shield-alt"></i> <h4>Seguridad y salud</h4>
